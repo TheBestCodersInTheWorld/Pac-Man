@@ -109,17 +109,18 @@ class Block(pygame.sprite.Sprite):
         # Create an image of the block, and fill it with a color.
         # This could also be an image loaded from the disk.
         # TODO: create a block with pygame.Surface()
+        self.block = pygame.Surface((width, height))
         # TODO: color the block white using .fill()
-
-        self.image.set_colorkey(white)
+        self.block.fill(white)
+        self.block.set_colorkey(white)
 
         # TODO: do pygame.draw.ellipse for drawing the block
- 
+        pygame.draw.ellipse(self.block, color, (0, 0, width, height))
         # Fetch the rectangle object that has the dimensions of the image
         # image.
         # Update the position of this object by setting the values 
         # of rect.x and rect.y
-        self.rect = self.image.get_rect() 
+        self.rect = self.block.get_rect() 
 
 # This class represents the bar at the bottom that the player controls
 class Player(pygame.sprite.Sprite):
@@ -159,13 +160,13 @@ class Player(pygame.sprite.Sprite):
         
         # TODO: fill in the code below
         old_x=self.rect.left
-        new_x= old_x + # What goes here?
+        new_x= old_x + self.change_x
         prev_x= old_x + self.prev_x
-        self.rect.left = # What does here?
+        self.rect.left = new_x
         
         old_y=self.rect.top 
-        new_y=old_y + # What goes here?
-        prev_y=old_y + # What goes here?
+        new_y=old_y + self.change_y
+        prev_y=old_y + self.prev_y
 
         # Did this update cause us to hit a wall?
         x_collide = pygame.sprite.spritecollide(self, walls, False)
@@ -340,13 +341,13 @@ pygame.init()
   
 # Create an 606x606 sized screen
 # TODO: create the screen using pygame.display.set_mode()
-
+screen = pygame.display.set_mode((606, 606))
 # This is a list of 'sprites.' Each block in the program is
 # added to this list. The list is managed by a class called 'RenderPlain.'
 
 
 # TODO: Set the title of the window to 'Pacman' using pygame.display.set_caption()
-
+screen.set_caption('Pac-Man')
 # Create a surface we can draw on
 background = pygame.Surface(screen.get_size())
 
@@ -354,11 +355,12 @@ background = pygame.Surface(screen.get_size())
 background = background.convert()
   
 # TODO Fill the screen with a black background
-
+background.fill(black)
 clock = pygame.time.Clock()
 
 pygame.font.init()
 font = pygame.font.Font("freesansbold.ttf", 24)
+
 
 #default locations for Pacman and monstas
 w = 303-16 #Width
